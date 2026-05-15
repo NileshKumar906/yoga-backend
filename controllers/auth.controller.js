@@ -12,7 +12,12 @@ exports.register = async(req,res)=>{
         password:hashed,
     });
     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
-    res.json({token});
+    res.json({token,
+                user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+        }});
 };
 
 exports.login= async(req, res)=>{
@@ -23,5 +28,11 @@ exports.login= async(req, res)=>{
     if(!isMatch) return res.status(400).json({msg:"Wrong password"});
 
     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
-    res.json({token});
+    res.json({token,
+                user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+        }
+             });
 }
