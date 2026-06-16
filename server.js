@@ -18,6 +18,10 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/yoga", require("./routes/yoga.routes"));
 app.use("/api/upload", require("./routes/upload.routes"));
+app.use(
+  "/api/notification",
+  require("./routes/notification.routes")
+);
 // ROUTES
 app.use(
   "/api/auth",
