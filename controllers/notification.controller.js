@@ -2,36 +2,34 @@ const User = require("../models/user.model");
 
 exports.saveFcmToken = async (req, res) => {
 
+  console.log("===== FCM ROUTE HIT =====");
+
   try {
 
     const userId = req.user;
 
     const { fcmToken } = req.body;
 
-    if (!fcmToken) {
-      return res.status(400).json({
-        msg: "FCM token required"
-      });
-    }
+    console.log("USER ID:", userId);
+    console.log("FCM TOKEN:", fcmToken);
 
     await User.findByIdAndUpdate(
       userId,
-      {
-        fcmToken
-      }
+      { fcmToken }
     );
+
+    console.log("TOKEN SAVED");
 
     return res.json({
       success: true
     });
 
-  } catch (error) {
+  } catch(error){
 
     console.log(error);
 
     return res.status(500).json({
       msg: "Server Error"
     });
-
   }
 };
