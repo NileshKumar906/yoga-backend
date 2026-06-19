@@ -7,25 +7,42 @@ const connectDB = require("./config/db");
 
 const app = express();
 
+require("./cron/morningReminder");
 
-// CONNECT DATABASE
 connectDB();
 
-
-// MIDDLEWARES
 app.use(cors());
 
+// MUST COME FIRST
 app.use(express.json());
-app.use("/api/yoga", require("./routes/yoga.routes"));
-app.use("/api/upload", require("./routes/upload.routes"));
+
 app.use(
-  "/api/notification",
-  require("./routes/notification.routes")
+  "/api/auth",
+  require("./routes/googleAuth.routes")
 );
-// ROUTES
+
 app.use(
   "/api/auth",
   require("./routes/auth.routes")
+);
+app.use(
+  "/api/profile",
+  require("./routes/profile.routes")
+);
+
+app.use(
+  "/api/yoga",
+  require("./routes/yoga.routes")
+);
+
+app.use(
+  "/api/upload",
+  require("./routes/upload.routes")
+);
+
+app.use(
+  "/api/notification",
+  require("./routes/notification.routes")
 );
 
 app.use(
@@ -33,21 +50,13 @@ app.use(
   require("./routes/streak.routes")
 );
 
-
-// TEST ROUTE
 app.get("/", (req, res) => {
-
   res.send("Yoga Backend Running 🚀");
 });
 
-
-// PORT
 const PORT = process.env.PORT || 5000;
 
-
-// SERVER
 app.listen(PORT, "0.0.0.0", () => {
-
   console.log(
     `Server running on port ${PORT} 🚀`
   );

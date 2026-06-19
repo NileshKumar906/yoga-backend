@@ -10,10 +10,20 @@ const {
 } =
 require("../controllers/notification.controller");
 
+const {
+  sendTestNotification
+} =
+require("../controllers/testNotification.controller");
+
 router.post(
   "/fcm-token",
   auth,
   saveFcmToken
+);
+
+router.post(
+  "/test",
+  sendTestNotification
 );
 
 module.exports = router;

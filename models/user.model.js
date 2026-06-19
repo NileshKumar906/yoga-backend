@@ -16,12 +16,15 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       index: true,
     },
-
     password: {
-      type: String,
-      required: true,
-    },
-    
+  type: String,
+  default: null,
+},
+
+googleId: {
+  type: String,
+  default: null,
+},
       fcmToken: {
     type: String,
     default: null,

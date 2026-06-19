@@ -1,0 +1,57 @@
+const cron = require("node-cron");
+
+const User = require("../models/user.model");
+const admin = require("../config/firebase");
+
+cron.schedule("0 6 * * *", async () => {
+
+  console.log("Running Morning Reminder Cron");
+
+  try {
+
+    const users = await User.find({
+      fcmToken: {
+        $exists: true,
+        $ne: null
+      }
+    });
+
+    console.log(
+      `Found ${users.length} users`
+    );
+
+    for (const user of users) {
+
+      try {
+
+        await admin.messaging().send({
+
+          token: user.fcmToken,
+
+          notification: {
+            title: "🧘 Good Morning",
+            body:
+              "Start your day with 10 minutes of yoga."
+          }
+
+        });
+
+        console.log(
+          `Sent to ${user.email}`
+        );
+
+      } catch (e) {
+
+        console.log(
+          `Failed for ${user.email}`
+        );
+
+        console.log(e.message);
+      }
+    }
+
+  } catch (error) {
+
+    console.log(error);
+  }
+});
